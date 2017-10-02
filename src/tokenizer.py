@@ -32,6 +32,7 @@ def features(sentence, index):
         'suffix-2': sentence[index][0][-2:],
         'suffix-3': sentence[index][0][-3:],
         'prev_word': '' if index == 0 else sentence[index - 1][0],
+        'prev_pos': '' if index == 0 else sentence[index - 1][1],
         'next_word': '' if index == len(sentence) - 1 else sentence[index + 1][0],
         'has_hyphen': '-' in sentence[index][0],
         'is_numeric': sentence[index][0].isdigit(),
@@ -48,10 +49,18 @@ def transform_to_dataset(sentences):
     return X, Y
 
 
+# sentences = tokenize_conllu_file('../en-ud-dev.conllu')
+# cutoff = int(.1 * len(sentences))
+# training_sentences = sentences[:cutoff]
+# test_sentences = sentences[cutoff:cutoff+100]
+
 sentences = tokenize_conllu_file('../en-ud-dev.conllu')
-cutoff = int(.75 * len(sentences))
+cutoff = int(.9 * len(sentences))
 training_sentences = sentences[:cutoff]
 test_sentences = sentences[cutoff:]
+
+print('Training Sentences : %d ' % (len(training_sentences)))
+print('Testing Sentences : %d ' % (len(test_sentences)))
 
 X, y = transform_to_dataset(training_sentences)
 
@@ -69,11 +78,11 @@ clf = Pipeline([
     ('vectorizer', DictVectorizer(sparse=False)),
     ('classifier', DecisionTreeClassifier(criterion='entropy'))
 ])
-
+print 'Training Start'
 clf.fit(X, y)   # Use only the first 10K samples if you're running it multiple times. It takes a fair bit :)
-
 print 'Training completed'
 
+print 'Test Start'
 X_test, y_test = transform_to_dataset(test_sentences)
-
+print 'Test Completed'
 print "Accuracy:", clf.score(X_test, y_test)
