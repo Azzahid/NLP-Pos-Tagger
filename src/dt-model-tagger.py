@@ -12,7 +12,6 @@ def tokenize(sentence_input):
     sentences.append(sentence)
     return sentences
 
-
 def features(sentence, index):
     """ sentence: [w1, w2, ...], index: the index of the word """
     return {
