@@ -39,3 +39,8 @@ print 'Training Completed'
 print 'Testing Start'
 tagger.test(test_sentences, verbose=False)
 print 'Testing Completed'
+
+
+import dill
+with open('my_tagger.dill', 'wb') as f:
+    dill.dump(tagger, f)
