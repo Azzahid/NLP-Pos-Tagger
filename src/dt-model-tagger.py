@@ -36,12 +36,12 @@ def features(sentence, index):
         'capitals_inside': sentence[index][0][1:].lower() != sentence[index][0][1:]
     }
 
-def transform_to_dataset(sentence):
+def transform_to_dataset(sentences):
     X, Y = [], []
-    for index in range(len(sentence)):
-        X.append(features(sentence, index))
-        Y.append(sentence[index][1])
-
+    for sentence in sentences:
+		for index in range(len(sentence)):
+			X.append(features(sentence, index))
+			Y.append(sentence[index][1])
     return X, Y
 
 clf = joblib.load('DT-model.pkl')

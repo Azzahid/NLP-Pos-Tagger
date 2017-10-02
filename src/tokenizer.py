@@ -1,3 +1,8 @@
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.feature_extraction import DictVectorizer
+from sklearn.pipeline import Pipeline
+from sklearn.externals import joblib
+
 import re
 def tokenize_conllu_file( file_dir ):
     file = open(file_dir, 'r')
@@ -70,10 +75,6 @@ print len(X)
 #     print y[i]
 #     print '\n\n'
 
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.feature_extraction import DictVectorizer
-from sklearn.pipeline import Pipeline
-
 clf = Pipeline([
     ('vectorizer', DictVectorizer(sparse=False)),
     ('classifier', DecisionTreeClassifier(criterion='entropy'))
@@ -81,6 +82,8 @@ clf = Pipeline([
 print 'Training Start'
 clf.fit(X, y)   # Use only the first 10K samples if you're running it multiple times. It takes a fair bit :)
 print 'Training completed'
+
+joblib.dump(clf, 'DT-model.pkl') 
 
 print 'Test Start'
 X_test, y_test = transform_to_dataset(test_sentences)
